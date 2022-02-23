@@ -36,7 +36,8 @@ P_Art: Number of art books purchased
 ## Loading libraries
 
 
-```{r echo=FALSE}
+```{r message=FALSE}
+
 library(readxl)
 library(e1071)
 library(caret)
@@ -53,9 +54,11 @@ library(corrplot)
 
 
 
+
+
 ## Load in data
 
-```{r pressure, echo=FALSE}
+```{r pressure}
 bbtrain = read_excel("/Users/thomasfarrell/Downloads/BBBC-Train.xlsx")
 bbtest = read_excel("/Users/thomasfarrell/Downloads/BBBC-Test.xlsx")
 ```
