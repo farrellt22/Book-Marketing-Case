@@ -1,0 +1,182 @@
+---
+title: "Book case study"
+output: 
+  html_document:
+    code_folding: "hide"
+
+---
+
+
+## Methodology
+
+  choice: whether the customer purchased the art history of Florence. 
+  1- represents a purchase
+  0- representa a nonpurchase
+  
+Gender: 0 = Female , 1 = Male
+Amount_Purchased - Total money spent on BBBC books
+
+Frequency: Total number of purchases in the chosen period 
+
+Last_Purchase: Months since last purchase
+
+First_Purchase: Months since first purchase
+
+P_Child: Number of children's books purchased
+
+P_Youth: Number of youth books purchased
+
+P_Cook: Number of cookbooks purchased
+
+P_DIY: Number of do-it-yourself books purchased
+
+P_Art: Number of art books purchased
+
+
+## Loading libraries
+
+
+```{r echo=FALSE}
+library(readxl)
+library(e1071)
+library(caret)
+library(ROCR)
+library(ggplot2)
+library(tidyverse)
+library(DataExplorer)
+library(ggThemeAssist)
+library(esquisse)
+library(gridExtra)
+library(trackdown)
+library(corrplot)
+```
+
+
+
+## Load in data
+
+```{r pressure, echo=FALSE}
+bbtrain = read_excel("/Users/thomasfarrell/Downloads/BBBC-Train.xlsx")
+bbtest = read_excel("/Users/thomasfarrell/Downloads/BBBC-Test.xlsx")
+```
+
+
+
+## Checking for any missing values
+
+```{r}
+colSums(is.na(bbtest))
+```
+
+
+## Remove first column is data
+We remove the first variable in the data due to the fact that this column just held a placeholder number.
+```{r}
+bbtrain = bbtrain[-c(1)]
+bbtest = bbtest[-c(1)]
+```
+
+
+## Convert the response variable to a factor
+
+```{r}
+bbtrain$Choice = as.factor(bbtrain$Choice)
+bbtest$Choice = as.factor(bbtest$Choice)
+```
+
+
+
+## Checking correlation within X-Variables
+
+```{r}
+b1_num = dplyr::select_if(bbtrain, is.numeric)
+M = cor(b1_num)
+corrplot(M, method = "number")
+
+cor(bbtrain[sapply(bbtrain, is.numeric)])
+```
+
+
+Highest correlations are between First_purchase and Last_purchase, which makes sense in a way. An only customer makes a purchase and walks out, that may be both a First purchase and Last purchase observation. Repeat customers will have a longer time in months for their first First purchase than their Last purchase. 
+
+
+
+
+```{r}
+p1 = ggplot(data = bbtrain, mapping = aes(x = Frequency, fill = Choice))+
+  geom_histogram() + theme(plot.title = element_text(face = "italic"),
+    panel.background = element_rect(fill = "gray90",
+        colour = "antiquewhite1", linetype = "dotted"),
+    plot.background = element_rect(fill = "white",
+        linetype = "dashed"))
+
+
+
+```
+
+
+
+```{r}
+
+p2 = ggplot(bbtrain) +
+  aes(x = Last_purchase, fill = Choice) +
+  geom_histogram(bins = 30L) +
+  scale_fill_hue(direction = 1) +
+  theme_minimal()
+```
+
+```{r}
+p3 = ggplot(bbtrain) +
+  aes(x = P_Child, fill = Choice) +
+  geom_histogram(bins = 30L) +
+  scale_fill_hue(direction = 1) +
+  theme_minimal()
+```
+
+
+
+```{r}
+p4 = ggplot(bbtrain) +
+  aes(x = Amount_purchased, fill = Choice) +
+  geom_histogram(bins = 30L) +
+  scale_fill_hue(direction = 1) +
+  theme_minimal()
+```
+
+
+
+
+```{r}
+grid.arrange(p1,p2,p3,p4)
+```
+
+
+
+
+
+## Exploratory analysis 
+
+```{r}
+par(mfrow = c(3,3))
+hist(bbtrain$Amount_purchased, xlab = "Amount Purchased", main = "Amount Purchased")
+hist(bbtrain$Frequency, xlab = "Total Num. Purchased", main = "Total Purchased")
+hist(bbtrain$Last_purchase, xlab = "Months Since Last Purchase", main = "Last Purchase")
+hist(bbtrain$First_purchase, xlab = "Months Since First Purchase", main = "First Purchase")
+hist(bbtrain$P_Child, xlab = "No. Children's Books Purchased", main = "Children's Books")
+hist(bbtrain$P_Youth, xlab = "No. Youth Books Purchased", main = "Youth Books")
+hist(bbtrain$P_Cook, xlab = "No. Cook Books Purchased", main = "Cook Books")
+hist(bbtrain$P_DIY, xlab = "No. DIY Books Purchased", main = "DIY Books")
+hist(bbtrain$P_Art, xlab = "No. Art Books Purchased", main = "Art Books")
+```
+
+
+From these charts we can see that the Amount Purchased variable is the only variable that looks normally distributed and they other variables appear to have a right skew in their results.
+
+## Results and findings
+
+
+
+```{r}
+
+```
+
