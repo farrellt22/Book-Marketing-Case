@@ -44,12 +44,13 @@ library(caret)
 library(ROCR)
 library(ggplot2)
 library(tidyverse)
-library(DataExplorer)
+library(MASS)
 library(ggThemeAssist)
 library(esquisse)
 library(gridExtra)
 library(trackdown)
 library(corrplot)
+source('/Users/thomasfarrell/Downloads/optim_threshold.R')
 ```
 
 
@@ -179,7 +180,118 @@ From these charts we can see that the Amount Purchased variable is the only vari
 
 
 
+### Linear model
+
+```{r}
+par(mfrow=c(2,2))
+mod_1 = lm(as.numeric(Choice) ~., data = bbtrain)
+plot(mod_1)
+```
+
+
+```{r}
+summary(mod_1)
+```
+
+#VIF for linear model
+
+```{r}
+car::vif(mod_1)
+```
+
+Last_Purchase and First_Purchase have a GVIF over 5 which tells us that we must remove these variables due to multiculinarity.
+
+
+```{r}
+bbtrain = dplyr::select(bbtrain, - Last_purchase)
+bbtrain = dplyr::select(bbtrain, - First_purchase)
+```
+
+```{r}
+mod_1 = lm(as.numeric(Choice) ~., data = bbtrain)
+car::vif(mod_1)
+```
+
+Our new model has improved as all our variables are under 5 GVIF.
+
+
+
+### Logit model
+
+```{r}
+glm.fit = glm(Choice ~ ., data = bbtrain, family = binomial)
+summary(glm.fit)
+```
+
+### finding the optimal threshold
+
+
+```{r}
+optim_threshold(glm.fit,bbtest, bbtest$Choice)
+```
+
+
+
+
+
+```{r}
+predprob = predict.glm(glm.fit, newdata = bbtest, type = "response")
+predict.glm = ifelse(predprob >= .23, 1, 0)
+caret::confusionMatrix(as.factor(predict.glm), as.factor(bbtest$Choice), positive = '1')
+```
+
+
+
+
+
+
+
+
+### Tuning the SVM Model
+
+
+```{r}
+set.seed(1)
+tuned = tune.svm(Choice ~ ., data = bbtrain, kernel = 'linear',gamma = seq(.01,.1,by = .025), cost = seq(.1,1.2, by = .1), scale = TRUE)
+tuned$best.parameters
+
+```
+
+#creating SVM using tuned parameters
+
+```{r}
+svm1 = svm(Choice ~ ., data = bbtrain, kernel = 'linear', gamma = tuned$best.parameters$gamma, cost = tuned$best.parameters$cost)
+
+```
+
+
+
+
+#Make predictions on training data set
+
+```{r}
+predSVM = predict(svm1, bbtrain)
+caret::confusionMatrix(predSVM, bbtrain$Choice, positive = "1")
+```
+
+The accuracy of our tuned model is 79.19% with a sensitivity of .285 and specificity of .96.
+
+
+#make prediticions on the testing data set
+
+```{r}
+predSVM = predict(svm1, bbtest)
+caret::confusionMatrix(predSVM, bbtest$Choice, positive = "1")
+```
+
+With our tuned model against the testing data our model achieves an accuracy of 90.13% and a sensitivity of .279 and specificity of .961.
+
+
 ```{r}
 
 ```
+
+
+
+
 
