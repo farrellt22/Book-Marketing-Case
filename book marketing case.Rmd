@@ -5,7 +5,9 @@ date: "2/28/2022"
 output: 
   pdf_document:
     toc: true
-
+    
+    
+bibliography: citations.bib
 ---
 
 
@@ -117,7 +119,7 @@ cor(bbtrain[sapply(bbtrain, is.numeric)])
 
 Highest correlations are between First_purchase and Last_purchase, which makes sense in a way. An only customer makes a purchase and walks out, that may be both a First purchase and Last purchase observation. Repeat customers will have a longer time in months for their first First purchase than their Last purchase. 
 
-
+[@art1][@art2][@art3][@art4]
 ## Exploratory Analysis
 
 ```{r}
@@ -193,6 +195,7 @@ From these charts we can see that the Amount Purchased variable is the only vari
 
 ## Results and findings
 
+|       The three modeling methods that we used were a linear regression model, a logit model (glm), and a support vector machine (SVM). The accuracy and sensitivity for each of the techniques vary, as well as the confusion matrices that tell us what each model predicts the best. However, the linear regression model would not be appropriate to use in this instance because a linear model can only be applied when using a continuous dependent variable, rather than a binary one that uses 0 and 1’s. Logistic regression is typically used when the objective of the prediction is to project an outcome variable versus seeing how every predictor variable is related to the outcome variable. 
 
 
 ### Linear model
@@ -308,7 +311,13 @@ With our tuned model against the testing data our model achieves an accuracy of 
 \newpage
 ## Conclusions and recommendations
 
+|       After evaluating all three models, we concluded that the SVM was best at predicting which customers did not purchase a book, however it did not accurately predict the customers who did purchase a book. This is shown through the confusion matrix of the testing data set, where the SVM confusion matrix predicted a large number of true negatives and a specificity of 96.1% and sensitivity of 27.9% with an overall accuracy of 90.1%. 
+|       The logistic regression model best predicted a balance between who did purchase a book and who did not. The sensitivity of the logistic regression model was 73%, the specificity was 71%, and the accuracy was 71.2%. From this information, we see that the proportion of the predictions are more accurate at choosing which respondents would purchase a book or not. 
+|       There are two different methods to try to balance the data. The first method is to take a smaller sample of the data with more even yes and no results. Then we could run a logistic regression to produce a more accurate model with similar specificity and sensitivity numbers. To make a more accurate SVM model would could use a weighted SVM model, which would assign weights to the dependent variable classes. The differences in weights will influence the classification outcome during the training phase.
 
 
+
+\newpage
+## References
 
 
