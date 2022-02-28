@@ -1,10 +1,22 @@
 ---
 title: "Book case study"
 output: 
-  html_document:
-    code_folding: "hide"
+  pdf_document:
+    toc: true
 
 ---
+
+
+\newpage
+
+## Executive Summary
+
+|       The Bookbinders club is a distribution company that sells specialty books through direct marketing. There are three types of predictive modeling used within this case to determine which customers the company should target for their next direct marketing campaign. The models utilized are Linear Regression, Logistic Regression, and Support Vector Machines. The results of the study show that the logistic regression model was the most accurate at predicting which customers would make a purchase with a sensitivity of 73%. When compared to the Support Vector machine model we only achieved a sensitivity of 28.5%. The most significant predictor variables found in the Logistic regression model were Gender, Time period since last purchase and their frequency.
+
+## The Problem
+
+|       BBBC is exploring whether to use predictive modeling approaches to improve the efficacy of its direct mail program. For a recent mailing, the company selected 20,000 customers in Pennsylvania, New York, and Ohio from its database and included with their regular mailing a specially produced brochure for the book The Art History of Florence. This resulted in a 9.03% response rate (1806 orders) for the purchase of the book. BBBC then developed a database to calibrate a response model to identify the factors that influences these purchases.  For this case analysis, we will use a subset of the database available to BBBC. It consists of data for 400 customers who purchased the book and 1200 customers who did not, thereby overrepresenting the response group. The dependent variable for the analysis is Choice – purchase or no purchase of the book. BBBC also selected several independent variables that it thought might explain the observed choice behavior. 
+	In this study we explored the variables that would be most significant to accurately predict who would purchase a book or not. We used the Linear Regression. Logit model, and Support Vector Machine to analyze the data.
 
 
 ## Methodology
@@ -104,7 +116,7 @@ cor(bbtrain[sapply(bbtrain, is.numeric)])
 Highest correlations are between First_purchase and Last_purchase, which makes sense in a way. An only customer makes a purchase and walks out, that may be both a First purchase and Last purchase observation. Repeat customers will have a longer time in months for their first First purchase than their Last purchase. 
 
 
-
+## Exploratory Analysis
 
 ```{r}
 p1 = ggplot(data = bbtrain, mapping = aes(x = Frequency, fill = Choice))+
@@ -158,7 +170,6 @@ grid.arrange(p1,p2,p3,p4)
 
 
 
-## Exploratory analysis 
 
 ```{r}
 par(mfrow = c(3,3))
@@ -175,6 +186,8 @@ hist(bbtrain$P_Art, xlab = "No. Art Books Purchased", main = "Art Books")
 
 
 From these charts we can see that the Amount Purchased variable is the only variable that looks normally distributed and they other variables appear to have a right skew in their results.
+
+\newpage
 
 ## Results and findings
 
@@ -221,13 +234,17 @@ Our new model has improved as all our variables are under 5 GVIF.
 ```{r}
 glm.fit = glm(Choice ~ ., data = bbtrain, family = binomial)
 summary(glm.fit)
+
+glm2.fit = step(glm.fit,direction = "backward")
+summary(glm2.fit)
+car::vif(glm2.fit)
 ```
 
 ### finding the optimal threshold
 
 
 ```{r}
-optim_threshold(glm.fit,bbtest, bbtest$Choice)
+optim_threshold(glm2.fit,bbtest, bbtest$Choice)
 ```
 
 
@@ -235,7 +252,7 @@ optim_threshold(glm.fit,bbtest, bbtest$Choice)
 
 
 ```{r}
-predprob = predict.glm(glm.fit, newdata = bbtest, type = "response")
+predprob = predict.glm(glm2.fit, newdata = bbtest, type = "response")
 predict.glm = ifelse(predprob >= .23, 1, 0)
 caret::confusionMatrix(as.factor(predict.glm), as.factor(bbtest$Choice), positive = '1')
 ```
@@ -286,10 +303,8 @@ caret::confusionMatrix(predSVM, bbtest$Choice, positive = "1")
 
 With our tuned model against the testing data our model achieves an accuracy of 90.13% and a sensitivity of .279 and specificity of .961.
 
-
-```{r}
-
-```
+\newpage
+## Conclusions and recommendations
 
 
 
