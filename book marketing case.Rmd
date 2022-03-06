@@ -23,6 +23,16 @@ bibliography: citations.bib
 	In this study we explored the variables that would be most significant to accurately predict who would purchase a book or not. We used the Linear Regression. Logit model, and Support Vector Machine to analyze the data.
 
 
+
+## Related Literature
+
+|       In the previous case study, we explored that Mitchell Dayton concluded that logistical regression analysis is often described as the response variable, which must be of numerical value. In this case study, we wanted to explore the use of linear regression. According to ---, linear regression and logistic regression have many similarities. However, there are a few differences. For example, linear regression more commonly handles regression problems while logistic regression tackles the process of classifying problems. 
+ 
+|       In Kyung-Shik Shin, Taik Soo Lee, and Hyun-jung Kim’s case study An Application of Support Vector Machines in Bankruptcy Prediction Model, they explored the use of support vector machines in a Bankruptcy Prediction Model. As Noel Bambrick, a Support Vector Machines helps with classification and regression through a machine learning algorithm. It uses the notion of finding a hyperplane to divide data into two groups. In Shin, Lee, and Kim’s case of corporate bankruptcy prediction, the Support Vector Model method is more effective than the Back-Propagation Neural Network method. The Support Vector Model proved to be more accurate and have better performance. Therefore, we wanted to explore the use of SVMs in our case study. 
+ 
+|       In addition to SVMs and linear regression, in this case study we will also explore the use of Logit Models. A Logit Regression Model is essentially the generalized linear model when discussing its link function. It is commonly compared to the logistical regression model, however, the logistic regression is the generalized linear model when discussing its activation function. In this case study, we explored the use of linear regression, support vector model, and a logit model to evaluate which variable would be most significant when predicting who would purchase a book. 
+
+\newpage
 ## Methodology
 
   choice: whether the customer purchased the art history of Florence. 
