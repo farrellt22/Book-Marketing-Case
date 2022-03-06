@@ -1,6 +1,6 @@
 ---
 title: "Book case study"
-author: "Thomas Farrell, Leo Salazar, Mia Brito, Raneen Aljamal"
+author: "Thomas Farrell, Leo Salazar, Mia Brito, Raneen Aljamal, Adrian Joshua"
 date: "2/28/2022"
 output: 
   pdf_document:
